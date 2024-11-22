@@ -1,13 +1,17 @@
 //elementos do DOM
 const display = document.querySelector(".display");
 const input = document.querySelector(".inputs");
-
+const log = document.querySelector(".log");
 //global variables
 let gPreviousOperand = '';
 let gCurrentOperand = '';
-let gResult = '';
 let gResultNumber = 0;
-let gBuffer = '';
+let gLastOp = '';
+
+function displayLog(){
+    log.textContent=`previous = ${gPreviousOperand}      `;
+    log.textContent +=`result = ${gResultNumber}`;
+}
 
 function refreshOperand(inputNumber){
     if ((gCurrentOperand).length === 9) return;
@@ -15,16 +19,18 @@ function refreshOperand(inputNumber){
     if(gCurrentOperand === ''){
         gCurrentOperand = inputNumber;
         display.textContent = gCurrentOperand;
+        gResultNumber = calculate(gLastOp);
+        console.log(gResultNumber);
+
 
     } else {
         gCurrentOperand += inputNumber;
         display.textContent = gCurrentOperand;
+        gResultNumber = calculate();
+
     }
 }
 
-function displayResult(){
-    display.textContent = gResult;
-}
 
 function clearDisplay() {
     display.textContent = '';
@@ -55,18 +61,20 @@ function userClick(event) {
         refreshOperand(clickedElement.textContent);
     }
     if (clickedElement.classList[0] === "operator") {
-        console.log(`operator was clicked ->previous:${gPreviousOperand}`)
         if (gPreviousOperand === ''){
             gPreviousOperand = gCurrentOperand;
-            gCurrentOperand = ''
+            gCurrentOperand = '';
+            lastOp = clickedElement.id;
+
         }
         else {
-            console.log("*")
-            gResultNumber = calculate(clickedElement.id);
+            gResultNumber = calculate(lastOp);
             display.textContent = String(gResultNumber);
             gPreviousOperand = String(gResultNumber);
+            lastOp = clickedElement.id;
             gCurrentOperand = '';
         }
+        displayLog();
 
         }
     }
