@@ -11,10 +11,10 @@ let gLastOp = '';
 
 function displayLog(){
     log.textContent =`result=${gResultNumber}     ` ;
+    log.textContent +=`current=${gCurrentOperand}   ` ;
     log.textContent +=`lastOp=${gLastOp}`;
 
 }
-
 function refreshOperand(inputNumber){
     if ((gCurrentOperand).length === 9) return;
     // gCurrentOperand += inputNumber;
@@ -23,15 +23,13 @@ function refreshOperand(inputNumber){
         gCurrentOperand = inputNumber;
         display.textContent = gCurrentOperand;
         gResultNumber = calculate(gLastOp);
-        console.log(gResultNumber);
-
+        displayLog();
 
     } else {
         gCurrentOperand += inputNumber;
         display.textContent = gCurrentOperand;
-        console.log(gLastOp);
-
         gResultNumber = calculate(gLastOp);
+        displayLog();
 
     }
 }
@@ -42,12 +40,14 @@ function clear() {
     gResultNumber = '';
     gCurrentOperand = '0';
     display.textContent = gPreviousOperand;
+    displayLog();
+
 }
 
 function calculate(inputId) {
     // if that checks if a operator is being pressed after the other, in this case
     // the display value becames the currentOperand
-    if (gCurrentOperand === '') gCurrentOperand = display.textContent;
+    if (gCurrentOperand === '0') gCurrentOperand = display.textContent;
     switch(inputId){
         case "_+":
             return +gPreviousOperand + +gCurrentOperand;
@@ -71,27 +71,48 @@ function calculate(inputId) {
 
 function userClick(event) {
     let clickedElement = event.target;
-    if(clickedElement.id === "clear") clear();
-    if (clickedElement.classList[0] === "number") {
-        refreshOperand(clickedElement.textContent);
-    }
-    if (clickedElement.classList[0] === "operator") {
-        if (gPreviousOperand === '0'){
-            gPreviousOperand = gCurrentOperand;
-            gCurrentOperand = '';
-            gLastOp = clickedElement.id;
+    switch (clickedElement.id) {
+        case "clear": 
+            clear();
+            return;
+        case  "_.":
+            if(gLastOp =="_=") clear();
+            if (gCurrentOperand.includes(".")) return;
+            else {
+                if(gCurrentOperand === "0") {
+                    gCurrentOperand = "0.";
+                    display.textContent = gCurrentOperand;
+                    displayLog();
 
-        }
-        else {
-            gResultNumber = +String(calculate(gLastOp)).slice(0,9);
-            display.textContent = String(gResultNumber);
-            gPreviousOperand = String(gResultNumber);
-            gLastOp = clickedElement.id;
-            gCurrentOperand = '';
-        }
-        displayLog();
-
-        }
+                }
+                else {
+                    gCurrentOperand += ".";
+                    console.log(gCurrentOperand);
+                    display.textContent = gCurrentOperand;
+                    displayLog();
+                }
+            }
+            return;
     }
+    switch (clickedElement.classList[0]) {
+        case "number":
+            refreshOperand(clickedElement.textContent);
+            break;
+        case "operator":
+            if (gPreviousOperand === '0'){
+                gPreviousOperand = gCurrentOperand;
+                gCurrentOperand = '0';
+                gLastOp = clickedElement.id;
+    
+            }
+            else {
+                gResultNumber = +String(calculate(gLastOp)).slice(0,9);
+                display.textContent = String(gResultNumber);
+                gPreviousOperand = String(gResultNumber);
+                gLastOp = clickedElement.id;
+                gCurrentOperand = '0';
+            }
+            displayLog();
+}}
 
 input.addEventListener("click", userClick);
