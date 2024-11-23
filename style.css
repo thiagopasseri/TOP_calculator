@@ -1,5 +1,5 @@
 *{
-    outline: 1px solid red;
+    outline: 2px solid rgb(95,158,160);
 }
 body{
     display:flex;
@@ -10,8 +10,8 @@ body{
 .canvas{
     display:flex;
     flex-direction: column;
-    /* width:400px; */
-    outline: 8px solid brown;
+    width:320px;
+    outline: 8px solid rgb(95,158,160);
     border-radius: 6px;
 
 }
@@ -23,7 +23,8 @@ body{
     display:flex;
     align-items: center;
     justify-content: center;
-    width:240px;
+    flex-basis: 100%;
+    /* width:%; */
     height:80px;
     font-size: 20px;
 }
@@ -32,18 +33,49 @@ body{
     flex-wrap: wrap;
     align-items: end;
     align-content: end;
-    width:240px;
+    align-items: stretch; /* Garante que os itens tenham altura uniforme */
+    width:75%;
 }
 .operators {
     display:flex;
     flex-wrap: wrap;
-    width:80px;
+    width:25%;
+}
+
+.operators > button {
+    background-color: rgb(255,228,225);
+    width:100%;
+    aspect-ratio: 1;
+}
+
+.numbers > button {
+    background-color: rgb(245,255,250);
+    width: 33%;
+    flex: 0 0 33.333%;
+    box-sizing: border-box; /* Para considerar bordas e padding */
+
+    aspect-ratio: 1;
+}
+#_0{
+    aspect-ratio: 2;
+
+}
+
+#clear {
+    background-color: rgb(255,250,205);
+}
+
+button:hover{
+    background-color: rgb(245,245,245) !important;
 }
 
 button {
-    width:80px;
-    height:80px;
+    font-size: 24px;
+    border-radius: 5px;
 }
+
+
+
 .inputs{
     display: flex;
 }
